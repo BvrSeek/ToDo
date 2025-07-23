@@ -43,6 +43,8 @@ app.delete('/api/tasks/:id', (req, res) => {
   res.status(204).send();
 });
 
-app.listen(3000, '127.0.0.1', () => {
-  console.log('Сервер запущен на http://127.0.0.1:3000');
+app.listen(3000, '0.0.0.0', () => {
+  console.log('Сервер доступен по адресам:');
+  console.log('http://localhost:3000');
+  console.log('http://127.0.0.1:3000');
 });
