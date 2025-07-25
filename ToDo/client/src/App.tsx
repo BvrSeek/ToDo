@@ -7,19 +7,34 @@ function App() {
   const [newTitle, setNewTitle] = useState('');
 
   useEffect(() => {
-    getTasks().then(setTasks);
+    getTasks()
+      .then(setTasks)
+      .catch(error => {
+        console.error('Ошибка при загрузке задач:', error);
+        alert('Ошибка при загрузке задач');
+      });
   }, []);
 
   const handleAdd = async () => {
     if (!newTitle.trim()) return;
-    const task = await addTask(newTitle);
-    setTasks([...tasks, task]);
-    setNewTitle('');
+    try {
+      const task = await addTask(newTitle);
+      setTasks([...tasks, task]);
+      setNewTitle('');
+    } catch (error) {
+      console.error('Ошибка при добавлении задачи:', error);
+      alert('Ошибка при добавлении задачи');
+    }
   };
 
   const handleDelete = async (id: number) => {
-    await deleteTask(id);
-    setTasks(tasks.filter(t => t.id !== id));
+    try {
+      await deleteTask(id);
+      setTasks(tasks.filter(t => t.id !== id));
+    } catch (error) {
+      console.error('Ошибка при удалении задачи:', error);
+      alert('Ошибка при удалении задачи');
+    }
   };
 
   return (
@@ -28,6 +43,7 @@ function App() {
       <input
         value={newTitle}
         onChange={e => setNewTitle(e.target.value)}
+        onKeyDown={e => e.key === 'Enter' && handleAdd()}
         placeholder="Новая задача"
       />
       <button onClick={handleAdd}>Добавить</button>
